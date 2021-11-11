@@ -1,0 +1,91 @@
+package com.daizhihua.tools.entity;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
+import java.io.Serializable;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+/**
+ * <p>
+ * 定时任务
+ * </p>
+ *
+ * @author 代志华
+ * @since 2021-11-10
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@ApiModel(value="SysQuartzJob对象", description="定时任务")
+public class SysQuartzJob extends Model<SysQuartzJob> {
+
+    private static final long serialVersionUID=1L;
+    public static final String JOB_KEY = "JOB_KEY";
+
+    @ApiModelProperty(value = "ID")
+      @TableId(value = "job_id", type = IdType.AUTO)
+    private Long jobId;
+    @ApiModelProperty(value = "用于子任务唯一标识", hidden = true)
+    @TableField(exist = false)
+    private String uuid;
+
+    @ApiModelProperty(value = "Spring Bean名称")
+    private String beanName;
+
+    @ApiModelProperty(value = "cron 表达式")
+    private String cronExpression;
+
+    @ApiModelProperty(value = "状态：1暂停、0启用")
+    private Boolean isPause;
+
+    @ApiModelProperty(value = "任务名称")
+    private String jobName;
+
+    @ApiModelProperty(value = "方法名称")
+    private String methodName;
+
+    @ApiModelProperty(value = "参数")
+    private String params;
+
+    @ApiModelProperty(value = "备注")
+    private String description;
+
+    @ApiModelProperty(value = "负责人")
+    private String personInCharge;
+
+    @ApiModelProperty(value = "报警邮箱")
+    private String email;
+
+    @ApiModelProperty(value = "子任务ID")
+    private String subTask;
+
+    @ApiModelProperty(value = "任务失败后是否暂停")
+    private Boolean pauseAfterFailure;
+
+    @ApiModelProperty(value = "创建者")
+    private String createBy;
+
+    @ApiModelProperty(value = "更新者")
+    private String updateBy;
+
+    @ApiModelProperty(value = "创建日期")
+    private String createTime;
+
+    @ApiModelProperty(value = "更新时间")
+    private String updateTime;
+
+    public Long getId(){
+        return this.jobId;
+    }
+
+    @Override
+    protected Serializable pkVal() {
+        return this.jobId;
+    }
+
+}

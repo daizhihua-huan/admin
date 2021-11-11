@@ -1,0 +1,71 @@
+server:
+  port: 8090
+  servlet:
+    context-path: /api
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://39.104.177.194:3306/huang90cnm?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: daizhihua
+    password: daizhihua1996
+    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      # 最大连接池数量
+      max-active: 30
+      # 初始化时建立物理连接的个数
+      initial-size: 5
+      ## 最小连接池数量
+      min-idle: 5
+      # 获取连接时最大等待时间，单位毫秒
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      ##连接保持空闲而不被驱逐的最小时间
+      min-evictable-idle-time-millis: 300000
+      # 用来检测连接是否有效的sql，要求是一个查询语句
+      validation-query: SELECT 1 FROM DUAL
+      # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+      test-while-idle: true
+      # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      test-on-borrow: false
+      # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      test-on-return: false
+      # 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+      pool-prepared-statements: false
+      # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+      max-pool-prepared-statement-per-connection-size: 50
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计
+      filter: stat,wall
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      # 合并多个DruidDataSource的监控数据
+      use-global-data-source-stat: true
+  redis:
+    host: 127.0.0.1
+    jedis:
+      pool:
+        max-active: 8
+
+
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+    enableSwaggerModels: true
+    enableDocumentManage: true
+    swaggerModelName: 实体类列表
+    enableVersion: false
+    enableReloadCacheParameter: false
+    enableAfterScript: true
+    enableFilterMultipartApiMethodType: POST
+    enableFilterMultipartApis: false
+    enableRequestCache: true
+    enableHost: false
+    enableHostText: 127.0.0.1:8000
+
+logging:
+  level:
+    com.daizhihua: debug
+rsa:
+  key: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAL69//kZLd8iM3eJhzmHVByoBaNhd8kV288aGqC4eeQGN32bak4Zqm78X1wbMK2FPewSPWqA932okDo+i867KSTIe7j+W+DrVFyg3+mOqqUbFQgxMGkO3XhYtYgRjRr5xDDDJYwKAQhR+B1IEeY9bqFmGTUxxFXN3yoiWqlxRgqFAgMBAAECgYEAmQLX/Z6qQq4v9TuZA5hA7EAJTdgZfHERhKCfLcDu3vHxv8xVydMi+qdvY/bX5MrXMrIrHG3am64GDQMxqiRPyrLB0s2lvymirJCWgug022KQbFRcyw5Delfex3rCPNhk+5KszV+SVtODGRDjbTS2OpZNz3Yt0IjTOKf3kcFmREECQQD0jveQ+D7muxXvnqY7S0lwdoYCB3FAXcb1+IGZ3v/OH+J2R3HvmmfprDEXMd6AcLqiIPUY0Yfl5vrHBFSxUSORAkEAx6p8I1ZV3jz9a8SX/J19Lj7R8QVRIsfuw1ZbUcNoKuNNPEuNOp+MVN4yeed+nV4f5BTkuQx7bzz/Te98Qq0VtQJAU5lnsYva3L7Jcd8WziAfW614g8sNgMZN1Bl+HB5p7YlivbIQlap/qRZutZIbkGZ4tiF0B2bhAMsjoNKvLOoisQJAU6m/LHtvrZi2w6Jz4RkIrAkMpUaKEd3e0SDtUNxlWJs38Mzjl63k+mbElcoHht8607JhiJyPWDQh8kEoOzQVhQJAD2E1ofiZdM38lSFrLJM4wmmEzuCplA1UsdDYjJbYkLGkV/fDI+UFn87GPtOgzTej4kNpV3AunbWyU8xO4trGSA==

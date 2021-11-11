@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>com.daizhihua</artifactId>
+        <groupId>com.daizhihua</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>daizhihua-manager</groupId>
+    <artifactId>daizhihua-manager</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.daizhihua.oauth</groupId>
+            <artifactId>daizhihua-oauth</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.daizhihua.daizhihua-exception</groupId>
+            <artifactId>daizhihua-exception</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+
+            <groupId>daizhihua-core</groupId>
+            <artifactId>daizhihua-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>
