@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * <p>
@@ -25,10 +26,18 @@ import org.springframework.stereotype.Service;
 public class SysQuartzLogServiceImpl extends ServiceImpl<SysQuartzLogMapper, SysQuartzLog> implements SysQuartzLogService {
 
     @Override
-    public IPage<SysQuartzLog> page(Pageable pageable, QueryVo queryVo) {
+    public IPage<SysQuartzLog> page(Pageable pageable, QueryVo queryVo,Boolean isSuccess) {
         IPage<SysQuartzLog> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
         QueryWrapper<SysQuartzLog> quartzLogQueryWrapper = new QueryWrapper<>();
-
+        if(StringUtils.hasText(queryVo.getBlurry())){
+            quartzLogQueryWrapper.like("job_name",queryVo.getBlurry());
+        }
+        if(null!=queryVo.getCreateTime()&&queryVo.getCreateTime().size()==2){
+            quartzLogQueryWrapper.between("create_time",queryVo.getCreateTime().get(0),queryVo.getCreateTime().get(1));
+        }
+        if(isSuccess!=null){
+            quartzLogQueryWrapper.eq("is_success",isSuccess);
+        }
         return  this.page(page,quartzLogQueryWrapper);
     }
 }

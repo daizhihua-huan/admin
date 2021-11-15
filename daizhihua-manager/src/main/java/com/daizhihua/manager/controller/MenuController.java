@@ -5,9 +5,11 @@ import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysMenu;
 import com.daizhihua.core.entity.SysUser;
 import com.daizhihua.core.util.DateUtils;
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.manager.service.MenuService;
 import com.daizhihua.core.res.Resut;
-import com.daizhihua.oauth.util.SecurityUtils;
+import com.daizhihua.core.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -41,15 +43,15 @@ public class MenuController implements BaseController<SysMenu> {
      */
     @RequestMapping(value = "/listMenu",method = RequestMethod.POST)
     public Resut listMenu(){
-        SysUser userDto =  SecurityUtils.getCurrentUser();
-        List<SysMenu> sysMenus = menuService.listMenu(userDto.getUserId());
+        Long userId =  SecurityUtils.getCurrentUserId();
+        List<SysMenu> sysMenus = menuService.listMenu(userId);
         return Resut.ok(menuService.buildMenus( menuService.buildTree(sysMenus)));
     }
 
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     public Resut list() {
-        SysUser userDto =  SecurityUtils.getCurrentUser();
-        List<SysMenu> sysMenus = menuService.listMenu(userDto.getUserId());
+//        SysUser userDto =  SecurityUtils.getCurrentUser();
+        List<SysMenu> sysMenus = menuService.listMenu(SecurityUtils.getCurrentUserId());
         return Resut.ok(menuService.buildTree(sysMenus));
     }
 
@@ -68,6 +70,7 @@ public class MenuController implements BaseController<SysMenu> {
         return Resut.ok(menuService.listMenuIds(roleId));
     }
 
+    @Log(value = "添加菜单",type = LogActionType.ADD)
     @ApiOperation(value = "添加菜单")
     @PostMapping
     @Override
@@ -88,6 +91,7 @@ public class MenuController implements BaseController<SysMenu> {
         return Resut.ok();
     }
 
+    @Log(value = "删除菜单",type = LogActionType.DELETE)
     @ApiOperation(value = "删除菜单")
     @DeleteMapping
     public Resut delete(@RequestBody List<Long> ids) {
@@ -95,6 +99,7 @@ public class MenuController implements BaseController<SysMenu> {
         return Resut.ok(menuService.removeByIds(ids));
     }
 
+    @Log(value = "更新菜单",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新菜单")
     @Override
     @PutMapping

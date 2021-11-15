@@ -1,10 +1,12 @@
 package com.daizhihua.tools.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.daizhihua.core.controllers.BaseController;
 import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.res.Resut;
 import com.daizhihua.core.util.DateUtils;
-import com.daizhihua.oauth.util.SecurityUtils;
+import com.daizhihua.core.exception.BadRequestException;
+import com.daizhihua.core.util.SecurityUtils;
 import com.daizhihua.tools.entity.SysQuartzJob;
 import com.daizhihua.tools.service.SysQuartzJobService;
 import com.daizhihua.tools.service.SysQuartzLogService;
@@ -12,10 +14,12 @@ import com.daizhihua.tools.util.QuartzManage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.CronExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Api(value = "任务管理")
@@ -51,15 +55,8 @@ public class JobsController implements BaseController<SysQuartzJob> {
     @ApiOperation(value = "状态修改")
     @PutMapping(value = "/{id}")
     public Resut updateIsPause(@PathVariable Long id){
-        SysQuartzJob sysQurzJob = sysQuartzJobService.getById(id);
-        if(sysQurzJob.getIsPause()){
-            sysQurzJob.setIsPause(false);
-            quartzManage.resumeJob(sysQurzJob);
-        }else{
-            sysQurzJob.setIsPause(true);
-            quartzManage.pauseJob(sysQurzJob);
-        }
-        return Resut.ok(sysQuartzJobService.updateById(sysQurzJob));
+
+        return Resut.ok(sysQuartzJobService.updateIsPause(id));
     }
 
     @ApiOperation(value = "新增任务")
@@ -67,15 +64,8 @@ public class JobsController implements BaseController<SysQuartzJob> {
     @Override
     public Resut add(@RequestBody SysQuartzJob sysQuartzJob) {
         log.info("参数是:{}",sysQuartzJob);
-        sysQuartzJob.setCreateBy(SecurityUtils.getCurrentUsername());
-        sysQuartzJob.setUpdateBy(SecurityUtils.getCurrentUsername());
-        sysQuartzJob.setCreateTime(DateUtils.getDateTime());
-        sysQuartzJob.setUpdateTime(DateUtils.getDateTime());
-        boolean flag = sysQuartzJobService.save(sysQuartzJob);
-        if(flag){
-            quartzManage.addJob(sysQuartzJob);
-        }
-        return Resut.ok(flag);
+
+        return Resut.ok(sysQuartzJobService.saveJobs(sysQuartzJob));
     }
 
     @ApiOperation(value = "删除任务")
@@ -94,17 +84,31 @@ public class JobsController implements BaseController<SysQuartzJob> {
     @PutMapping
     @Override
     public Resut update(@RequestBody SysQuartzJob sysQuartzJob) {
+        if (!CronExpression.isValidExpression(sysQuartzJob.getCronExpression())){
+            throw new BadRequestException("cron表达式格式错误");
+        }
+        if(StringUtils.isNotBlank(sysQuartzJob.getSubTask())){
+            List<String> tasks = Arrays.asList(sysQuartzJob.getSubTask().split("[,，]"));
+            if (tasks.contains(sysQuartzJob.getId().toString())) {
+                throw new BadRequestException("子任务中不能添加当前任务ID");
+            }
+        }
         sysQuartzJob.setUpdateTime(DateUtils.getDateTime());
         sysQuartzJob.setUpdateBy(SecurityUtils.getCurrentUsername());
-        return Resut.ok(sysQuartzJobService.updateById(sysQuartzJob));
+        boolean flag = sysQuartzJobService.updateById(sysQuartzJob);
+        if(flag){
+            quartzManage.updateJobCron(sysQuartzJob);
+        }
+        return Resut.ok(flag);
     }
 
     @ApiOperation(value = "查询日志",notes = "查询日志详情信息")
     @GetMapping(value = "/logs")
-    public Resut logs(Pageable pageable, QueryVo queryVo){
+    public Resut logs(Pageable pageable, QueryVo queryVo,Boolean isSuccess){
         log.info("分页参数是:{}",pageable);
         log.info("查询参数是:{}",queryVo);
-        return Resut.ok( sysQuartzLogService.page(pageable,queryVo));
+        log.info("{}",isSuccess);
+        return Resut.ok( sysQuartzLogService.page(pageable,queryVo,isSuccess));
     }
 
 }

@@ -13,29 +13,30 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.daizhihua.excpetion;
+package com.daizhihua.log.annotation;
 
-import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Zheng Jie
- * @date 2018-11-23
- * 统一异常处理
+ * @date 2018-11-24
  */
-@Getter
-public class BadRequestException extends RuntimeException{
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Log {
+    String value() default "";
 
-    private Integer status = BAD_REQUEST.value();
+    /**
+     * 是否启用
+     *
+     * @return
+     */
+    boolean enable() default true;
 
-    public BadRequestException(String msg){
-        super(msg);
-    }
-
-    public BadRequestException(HttpStatus status, String msg){
-        super(msg);
-        this.status = status.value();
-    }
+    LogActionType type() default LogActionType.SELECT;
 }

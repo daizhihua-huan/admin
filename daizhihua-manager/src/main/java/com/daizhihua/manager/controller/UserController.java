@@ -4,6 +4,8 @@ package com.daizhihua.manager.controller;
 import com.daizhihua.core.entity.SysUser;
 import com.daizhihua.core.res.Resut;
 
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.manager.entity.vo.UserVo;
 import com.daizhihua.manager.service.SystemUserService;
 import io.swagger.annotations.Api;
@@ -39,6 +41,7 @@ public class UserController  {
      * 2、mysql 增加索引提交访问速度
      * @return
      */
+
     @ApiOperation(value = "获取用户",notes = "获取所有用户列表")
     @GetMapping
     public Resut list(UserVo userVo,Pageable pageable){
@@ -70,7 +73,7 @@ public class UserController  {
 
 
 
-
+    @Log(value = "用户新增",type = LogActionType.ADD)
     @ApiOperation(value = "添加")
     @PostMapping
     public Resut add(@RequestBody SysUser sysUser){
@@ -82,6 +85,8 @@ public class UserController  {
         }
 
     }
+
+    @Log(value = "删除用户",type = LogActionType.DELETE)
     @ApiOperation(value = "删除")
     @ApiImplicitParam(name = "userIds",value = "用户主键集合")
     @DeleteMapping
@@ -92,6 +97,7 @@ public class UserController  {
         return Resut.ok();
     }
 
+    @Log(value = "更新用户",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新")
     @PutMapping
     public Resut update(@RequestBody SysUser sysUser) {

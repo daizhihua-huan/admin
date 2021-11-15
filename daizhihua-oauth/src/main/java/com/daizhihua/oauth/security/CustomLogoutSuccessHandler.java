@@ -1,6 +1,8 @@
 package com.daizhihua.oauth.security;
 
 import com.daizhihua.core.util.ResponseUtil;
+import com.daizhihua.oauth.entity.OnlineUserDto;
+import com.daizhihua.oauth.util.CacheUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         JSONObject o = new JSONObject();
+        String id = request.getParameter("id");
         o.put("status",HttpServletResponse.SC_OK);
         o.put("messgae","退出成功");
         log.info("{}",authentication);
@@ -25,6 +28,10 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             ResponseUtil.write(response,o);
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            OnlineUserDto forUserId = CacheUtil.getForUserId(Long.valueOf(id));
+            CacheUtil.removeUser(forUserId);
+            CacheUtil.removeForUserId(Long.valueOf(id));
         }
     }
 }

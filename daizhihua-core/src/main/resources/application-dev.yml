@@ -50,6 +50,10 @@ spring:
 
 knife4j:
   enable: true
+  basic:
+    enable: true
+    username: daizhihua
+    password: daizhihua1996
   setting:
     language: zh-CN
     enableSwaggerModels: true
@@ -69,3 +73,18 @@ logging:
     com.daizhihua: debug
 rsa:
   key: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAL69//kZLd8iM3eJhzmHVByoBaNhd8kV288aGqC4eeQGN32bak4Zqm78X1wbMK2FPewSPWqA932okDo+i867KSTIe7j+W+DrVFyg3+mOqqUbFQgxMGkO3XhYtYgRjRr5xDDDJYwKAQhR+B1IEeY9bqFmGTUxxFXN3yoiWqlxRgqFAgMBAAECgYEAmQLX/Z6qQq4v9TuZA5hA7EAJTdgZfHERhKCfLcDu3vHxv8xVydMi+qdvY/bX5MrXMrIrHG3am64GDQMxqiRPyrLB0s2lvymirJCWgug022KQbFRcyw5Delfex3rCPNhk+5KszV+SVtODGRDjbTS2OpZNz3Yt0IjTOKf3kcFmREECQQD0jveQ+D7muxXvnqY7S0lwdoYCB3FAXcb1+IGZ3v/OH+J2R3HvmmfprDEXMd6AcLqiIPUY0Yfl5vrHBFSxUSORAkEAx6p8I1ZV3jz9a8SX/J19Lj7R8QVRIsfuw1ZbUcNoKuNNPEuNOp+MVN4yeed+nV4f5BTkuQx7bzz/Te98Qq0VtQJAU5lnsYva3L7Jcd8WziAfW614g8sNgMZN1Bl+HB5p7YlivbIQlap/qRZutZIbkGZ4tiF0B2bhAMsjoNKvLOoisQJAU6m/LHtvrZi2w6Jz4RkIrAkMpUaKEd3e0SDtUNxlWJs38Mzjl63k+mbElcoHht8607JhiJyPWDQh8kEoOzQVhQJAD2E1ofiZdM38lSFrLJM4wmmEzuCplA1UsdDYjJbYkLGkV/fDI+UFn87GPtOgzTej4kNpV3AunbWyU8xO4trGSA==
+
+# 文件存储路径
+file:
+  mac:
+    path: ~/file/
+    avatar: ~/avatar/
+  linux:
+    path: /home/eladmin/file/
+    avatar: /home/eladmin/avatar/
+  windows:
+    path: D:\eladmin\file\
+    avatar: D:\eladmin\avatar\
+  # 文件大小 /M
+  maxSize: 100
+  avatarMaxSize: 5

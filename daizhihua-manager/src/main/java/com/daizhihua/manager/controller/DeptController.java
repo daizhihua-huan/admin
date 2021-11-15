@@ -5,8 +5,10 @@ import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysDept;
 import com.daizhihua.core.res.Resut;
 import com.daizhihua.core.util.DateUtils;
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.manager.service.DeptService;
-import com.daizhihua.oauth.util.SecurityUtils;
+import com.daizhihua.core.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class DeptController implements BaseController<SysDept> {
         return Resut.ok(deptService.listDept(queryVo,enabled));
     }
 
+    @Log(value = "新增部门",type = LogActionType.ADD)
     @ApiOperation(value = "部门新增",notes = "新增部门")
     @PostMapping
     @Override
@@ -50,6 +53,7 @@ public class DeptController implements BaseController<SysDept> {
         return null;
     }
 
+    @Log(value = "删除部门",type = LogActionType.DELETE)
     @ApiOperation(value = "删除id")
     @DeleteMapping
     public Resut delete(@RequestBody List<Long> ids){
@@ -58,6 +62,7 @@ public class DeptController implements BaseController<SysDept> {
     }
 
 
+    @Log(value = "修改部门",type = LogActionType.UPDATE)
     @ApiOperation(value = "修改部门")
     @PutMapping
     @Override

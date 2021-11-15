@@ -13,8 +13,9 @@ import org.springframework.web.servlet.config.annotation.*;
 @Configuration
 @EnableWebMvc
 public class AppConfigurerAdapter implements WebMvcConfigurer {
-
-
+    /** 文件配置 */
+    @Autowired
+    private  FileProperties properties;
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
@@ -64,8 +65,14 @@ public class AppConfigurerAdapter implements WebMvcConfigurer {
         /** 公共部分内容 */
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
 
+        FileProperties.ElPath path = properties.getPath();
+        String avatarUtl = "file:" + path.getAvatar().replace("\\","/");
+        String pathUtl = "file:" + path.getPath().replace("\\","/");
+        registry.addResourceHandler("/avatar/**").addResourceLocations(avatarUtl).setCachePeriod(0);
+        registry.addResourceHandler("/file/**").addResourceLocations(pathUtl).setCachePeriod(0);
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/").setCachePeriod(0);
+    }
 
 
 

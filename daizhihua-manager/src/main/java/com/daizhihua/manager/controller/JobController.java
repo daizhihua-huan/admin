@@ -5,8 +5,10 @@ import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysJob;
 import com.daizhihua.core.res.Resut;
 import com.daizhihua.core.util.DateUtils;
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.manager.service.JobService;
-import com.daizhihua.oauth.util.SecurityUtils;
+import com.daizhihua.core.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,7 @@ public class JobController implements BaseController<SysJob> {
     }
 
     @ApiOperation(value = "新增岗位")
+    @Log(value = "新增岗位",type = LogActionType.ADD)
     @PostMapping
     @Override
     public Resut add(@RequestBody SysJob sysJob) {
@@ -62,6 +65,7 @@ public class JobController implements BaseController<SysJob> {
         return null;
     }
 
+    @Log(value = "删除岗位",type = LogActionType.DELETE)
     @ApiOperation(value = "删除岗位",notes = "删除岗位可以是多个ids")
     @DeleteMapping
     public Resut delete(@RequestBody List<Long> ids){
@@ -69,6 +73,7 @@ public class JobController implements BaseController<SysJob> {
         return Resut.ok(jobService.removeByIds(ids));
     }
 
+    @Log(value = "修改岗位",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新岗位")
     @PutMapping
     @Override

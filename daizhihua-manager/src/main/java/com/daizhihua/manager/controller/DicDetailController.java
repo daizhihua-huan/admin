@@ -1,22 +1,20 @@
 package com.daizhihua.manager.controller;
 
-import cn.hutool.db.Page;
 import com.daizhihua.core.controllers.BaseController;
-import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysDictDetail;
 import com.daizhihua.core.res.Resut;
 import com.daizhihua.core.util.DateUtils;
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.manager.service.DicDetailService;
 import com.daizhihua.manager.service.DictService;
-import com.daizhihua.oauth.util.SecurityUtils;
+import com.daizhihua.core.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Api(value = "数据字典详情")
 @RestController
@@ -45,7 +43,7 @@ public class DicDetailController implements BaseController<SysDictDetail> {
         return Resut.ok(dicDetailService.page(pageable,dictName));
     }
 
-
+    @Log(value = "新增数据字典详情",type = LogActionType.ADD)
     @ApiOperation(value = "新增",notes = "新增数据字典详情")
     @PostMapping
     @Override
@@ -58,6 +56,7 @@ public class DicDetailController implements BaseController<SysDictDetail> {
         return Resut.ok( dicDetailService.save(sysDictDetail));
     }
 
+    @Log(value = "删除数据字典详情",type = LogActionType.DELETE)
     @ApiOperation(value = "删除",notes = "删除数据字典详情")
     @Override
     @DeleteMapping(value = "/{id}")
@@ -73,6 +72,7 @@ public class DicDetailController implements BaseController<SysDictDetail> {
 //        return Resut.ok(dicDetailService.removeByIds(ids));
 //    }
 
+    @Log(value = "修改数据字典详情",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新",notes = "更新数据字典详情")
     @PutMapping
     @Override

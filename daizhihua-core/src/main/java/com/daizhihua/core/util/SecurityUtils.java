@@ -13,20 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.daizhihua.oauth.util;
+package com.daizhihua.core.util;
 
-
-import com.daizhihua.core.entity.SysUser;
-import com.daizhihua.core.util.SpringContextUtils;
-import com.daizhihua.excpetion.SecurityRequestException;
-import com.daizhihua.oauth.service.imple.UserServiceImple;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.daizhihua.core.enums.DataScopeEnum;
+import com.daizhihua.core.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 /**
  * 获取当前登录的用户
@@ -40,21 +41,17 @@ public class SecurityUtils {
      * 获取当前登录的用户
      * @return UserDetails
      */
-    public static SysUser getCurrentUser() {
+    public static UserDetails getCurrentUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new SecurityRequestException(HttpStatus.UNAUTHORIZED, "当前登录状态过期");
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED, "当前登录状态过期");
         }
         if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            UserServiceImple userDetailsService = (UserServiceImple) SpringContextUtils.getBean(UserDetailsService.class);
-            SysUser sysUser = userDetailsService.getSysUser();
-            if(sysUser==null){
-                throw new SecurityRequestException(HttpStatus.UNAUTHORIZED, "登录过期重新登录");
-            }
-            return  sysUser;
+            UserDetailsService userDetailsService = SpringContextUtils.getBean(UserDetailsService.class);
+            return userDetailsService.loadUserByUsername(userDetails.getUsername());
         }
-        throw new SecurityRequestException(HttpStatus.UNAUTHORIZED, "找不到当前登录的信息");
+        throw new BadRequestException(HttpStatus.UNAUTHORIZED, "找不到当前登录的信息");
     }
 
     /**
@@ -65,7 +62,7 @@ public class SecurityUtils {
     public static String getCurrentUsername() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new SecurityRequestException(HttpStatus.UNAUTHORIZED, "当前登录状态过期");
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED, "当前登录状态过期");
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return userDetails.getUsername();
@@ -75,30 +72,31 @@ public class SecurityUtils {
      * 获取系统用户ID
      * @return 系统用户ID
      */
-//    public static Long getCurrentUserId() {
-//        UserDetails userDetails = getCurrentUser();
-//        return new JSONObject(new JSONObject(userDetails).get("user")).get("id", Long.class);
-//    }
+    public static Long getCurrentUserId() {
+        UserDetails userDetails = getCurrentUser();
+        return new JSONObject(userDetails).get("userId", Long.class);
+    }
 
     /**
      * 获取当前用户的数据权限
      * @return /
      */
-//    public static List<Long> getCurrentUserDataScope(){
-//        UserDetails userDetails = getCurrentUser();
-//        JSONArray array = JSONUtil.parseArray(new JSONObject(userDetails).get("dataScopes"));
-//        return JSONUtil.toList(array,Long.class);
-//    }
+    public static List<Long> getCurrentUserDataScope(){
+        UserDetails userDetails = getCurrentUser();
+
+        JSONArray array = JSONUtil.parseArray(new JSONObject(userDetails).get("dataScopes"));
+        return JSONUtil.toList(array,Long.class);
+    }
 
     /**
      * 获取数据权限级别
      * @return 级别
      */
-//    public static String getDataScopeType() {
-//        List<Long> dataScopes = getCurrentUserDataScope();
-//        if(dataScopes.size() != 0){
-//            return "";
-//        }
-//        return DataScopeEnum.ALL.getValue();
-//    }
+    public static String getDataScopeType() {
+        List<Long> dataScopes = getCurrentUserDataScope();
+        if(dataScopes.size() != 0){
+            return "";
+        }
+        return DataScopeEnum.ALL.getValue();
+    }
 }

@@ -16,7 +16,7 @@
 package com.daizhihua.excpetion.handler;
 
 import com.daizhihua.core.util.ThrowableUtil;
-import com.daizhihua.excpetion.BadRequestException;
+import com.daizhihua.core.exception.BadRequestException;
 import com.daizhihua.excpetion.MessageNotFoundException;
 import com.daizhihua.excpetion.SecurityRequestException;
 import lombok.extern.slf4j.Slf4j;

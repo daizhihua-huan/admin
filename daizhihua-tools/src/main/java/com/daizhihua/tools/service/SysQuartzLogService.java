@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 public interface SysQuartzLogService extends IService<SysQuartzLog> {
 
 
-   IPage<SysQuartzLog> page(Pageable pageable, QueryVo queryVo);
+   IPage<SysQuartzLog> page(Pageable pageable, QueryVo queryVo,Boolean isSuccess);
+
+
 
 }

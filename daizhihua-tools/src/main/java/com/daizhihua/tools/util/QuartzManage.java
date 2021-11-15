@@ -15,9 +15,8 @@
  */
 package com.daizhihua.tools.util;
 
-import com.daizhihua.excpetion.BadRequestException;
+import com.daizhihua.core.exception.BadRequestException;
 import com.daizhihua.tools.entity.SysQuartzJob;
-import com.daizhihua.tools.entity.SysQuartzLog;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.triggers.CronTriggerImpl;

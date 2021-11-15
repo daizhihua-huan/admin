@@ -7,7 +7,7 @@ import com.daizhihua.core.mapper.*;
 import com.daizhihua.manager.entity.vo.UserVo;
 import com.daizhihua.manager.service.DataScopeService;
 import com.daizhihua.manager.service.SystemUserService;
-import com.daizhihua.oauth.util.SecurityUtils;
+import com.daizhihua.core.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -170,11 +170,12 @@ public class SystemUserServiceImple implements SystemUserService {
          * 获取部门
          * 获取用户列表
          */
-        List<SysRole> sysRoles = sysRoleMapper.selectRoleForUserId(SecurityUtils.getCurrentUser().getUserId());
+        List<SysRole> sysRoles = sysRoleMapper.selectRoleForUserId(SecurityUtils.getCurrentUserId());
         List<Long> list = new ArrayList<>();
+        SysUser sysUser = sysUserMapper.selectById(SecurityUtils.getCurrentUserId());
         for (SysRole sysRole : sysRoles) {
             //获取角色权限
-            list.addAll(dataScopeService.getDataScope(SecurityUtils.getCurrentUser(), sysRole));
+            list.addAll(dataScopeService.getDataScope(sysUser, sysRole));
         }
         return list;
     }

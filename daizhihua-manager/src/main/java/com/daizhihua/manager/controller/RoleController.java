@@ -4,10 +4,12 @@ import com.daizhihua.core.controllers.BaseController;
 import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysRole;
 import com.daizhihua.core.res.Resut;
-import com.daizhihua.excpetion.BadRequestException;
+import com.daizhihua.core.exception.BadRequestException;
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.manager.entity.vo.RoleVo;
 import com.daizhihua.manager.service.RoleService;
-import com.daizhihua.oauth.util.SecurityUtils;
+import com.daizhihua.core.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +70,8 @@ public  class RoleController implements BaseController<SysRole> {
 
         return Resut.ok(roleService.getUserRoles(userId));
     }
+
+    @Log(value = "添加角色",type = LogActionType.ADD)
     @PostMapping
     @ApiOperation(value = "添加角色",notes = "添加角色")
     @Override
@@ -80,6 +84,8 @@ public  class RoleController implements BaseController<SysRole> {
 
         return Resut.ok();
     }
+
+    @Log(value = "修改菜单",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新菜单")
     @RequestMapping(value = "menu",method = RequestMethod.POST)
     public Resut addMenu(@RequestBody RoleVo roleVo){
@@ -102,6 +108,7 @@ public  class RoleController implements BaseController<SysRole> {
         return Resut.ok();
     }
 
+    @Log(value = "更新角色",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新角色")
     @RequestMapping(value = "updateRole",method = RequestMethod.POST)
     @Override
@@ -115,7 +122,7 @@ public  class RoleController implements BaseController<SysRole> {
      * @return /
      */
     private int getLevels(Integer level){
-        List<Integer> levels = roleService.getRoleForId(SecurityUtils.getCurrentUser().getUserId()).stream().map(SysRole::getLevel).collect(Collectors.toList());
+        List<Integer> levels = roleService.getRoleForId(SecurityUtils.getCurrentUserId()).stream().map(SysRole::getLevel).collect(Collectors.toList());
         int min = Collections.min(levels);
         if(level != null){
             if(level < min){

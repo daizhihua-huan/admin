@@ -102,13 +102,16 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/v2/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/avatar/**").permitAll()
+                .antMatchers("/file/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 //                .antMatchers(HttpMethod.POST, "/authentication/**").permitAll()
                 .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.PUT).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
-                .antMatchers(HttpMethod.GET).authenticated();
+                .antMatchers(HttpMethod.GET).authenticated()
+                .and().headers().frameOptions().disable();
         httpSecurity
                 .logout()
                 .logoutUrl("/auth/logout")

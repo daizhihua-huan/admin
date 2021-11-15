@@ -16,7 +16,11 @@ import java.util.Map;
 
 
 @SpringBootApplication
-@MapperScan({"com.daizhihua.core.mapper","com.daizhihua.manager.mapper","com.daizhihua.tools.mapper"})
+@MapperScan({"com.daizhihua.core.mapper",
+        "com.daizhihua.manager.mapper",
+        "com.daizhihua.tools.mapper",
+        "com.daizhihua.log.mapper"
+})
 public class MpGenerator {
 
 

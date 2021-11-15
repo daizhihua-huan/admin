@@ -5,8 +5,10 @@ import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysDict;
 import com.daizhihua.core.res.Resut;
 import com.daizhihua.core.util.DateUtils;
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.manager.service.DictService;
-import com.daizhihua.oauth.util.SecurityUtils;
+import com.daizhihua.core.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class DicController implements BaseController<SysDict> {
         return Resut.ok(dictService.page(pageable,queryVo));
     }
 
+    @Log(value = "新增数据字典",type = LogActionType.ADD)
     @ApiOperation(value = "添加",notes = "增加数据字典")
     @PostMapping
     @Override
@@ -51,6 +54,7 @@ public class DicController implements BaseController<SysDict> {
     }
 
 
+    @Log(value = "删除数据字典",type = LogActionType.DELETE)
     @ApiOperation(value = "删除",notes = "删除字典")
     @DeleteMapping
     public Resut delete(@RequestBody List<Long> ids){
@@ -58,6 +62,7 @@ public class DicController implements BaseController<SysDict> {
         return Resut.ok(dictService.removeByIds(ids));
     }
 
+    @Log(value = "修改数据字典",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新",notes = "修改数据字典")
     @PutMapping
     @Override

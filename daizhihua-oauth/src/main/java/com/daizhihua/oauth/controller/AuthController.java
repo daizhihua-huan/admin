@@ -1,34 +1,26 @@
 package com.daizhihua.oauth.controller;
 
-import com.baomidou.mybatisplus.extension.api.R;
-import com.daizhihua.core.config.ResponseData;
+import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.res.Resut;
-import com.daizhihua.core.util.RedisUtil;
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.oauth.entity.dto.AuthDto;
 import com.daizhihua.oauth.service.AuthService;
 import com.daizhihua.oauth.service.imple.UserServiceImple;
-import com.daizhihua.oauth.util.SecurityUtils;
-import com.wf.captcha.SpecCaptcha;
+import com.daizhihua.oauth.util.CacheUtil;
+import com.daizhihua.core.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 /**
  *
  */
@@ -42,13 +34,16 @@ import java.util.UUID;
 
 @Api(tags = "用户验证")
 @RestController
+@Slf4j
 @RequestMapping(value = "/auth")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
-
+    @Autowired
+    @Qualifier(value = "userService")
+    private UserServiceImple userDetailsService;
 
     /**
      * 验证码生成
@@ -66,6 +61,7 @@ public class AuthController {
      *  系统登录
      * @return
      */
+    @Log(value = "系统登录",type = LogActionType.LOGIN)
     @ApiOperation(value = "系统登录",notes = "系统登录功能")
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ApiImplicitParams({
@@ -85,9 +81,17 @@ public class AuthController {
     @RequestMapping(value = "/info",method = RequestMethod.GET)
     public Resut getInfo(){
 //        UserDetails currentUser =
-        return Resut.ok(SecurityUtils.getCurrentUser());
+        UserDetails currentUser = SecurityUtils.getCurrentUser();
+        return Resut.ok(userDetailsService.getSysUserForUserName(currentUser.getUsername()));
     }
 
+    @ApiOperation(value = "获取在线用户")
+    @GetMapping(value = "online")
+    public Resut list(Pageable pageable, QueryVo queryVo){
+        log.info("分页参数是:{}",pageable);
+        log.info("查询参数是:{}",queryVo);
+        return Resut.ok(CacheUtil.getUser());
+    }
 
 
 }

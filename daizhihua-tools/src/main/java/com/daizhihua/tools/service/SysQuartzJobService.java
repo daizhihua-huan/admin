@@ -33,6 +33,10 @@ public interface SysQuartzJobService extends IService<SysQuartzJob> {
     void executionSubJob(String[] tasks) throws InterruptedException;
 
 
+    boolean updateIsPause(Long id);
+
+    Boolean saveJobs(SysQuartzJob sysQuartzJob);
+
 
 
 
