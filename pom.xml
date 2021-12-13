@@ -9,8 +9,8 @@
         <version>2.4.5</version>
         <relativePath/>
     </parent>
-    <groupId>com.daizhihua</groupId>
-    <artifactId>com.daizhihua</artifactId>
+    <groupId>com.huanyuenwei</groupId>
+    <artifactId>com.huanyuenwei</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <build>
@@ -26,12 +26,15 @@
         </plugins>
     </build>
     <modules>
-        <module>daizhihua-core</module>
-        <module>daizhihua-manager</module>
-        <module>daizhihua-order</module>
-        <module>daizhihua-oauth</module>
-        <module>daizhihua-exception</module>
-        <module>daizhihua-tools</module>
+        <module>huanyuenwei-core</module>
+        <module>huanyuenwei-manager</module>
+        <module>huanyuenwei-order</module>
+        <module>huanyuenwei-oauth</module>
+        <module>huanyuenwei-exception</module>
+        <module>huanyuenwei-tools</module>
+        <module>huanyuenwei-log</module>
+        <module>huanyuenwei-mnt</module>
+        <module>huanyuenwei-video</module>
     </modules>
 
     <properties>

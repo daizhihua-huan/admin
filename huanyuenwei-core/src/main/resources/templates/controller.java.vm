@@ -1,0 +1,129 @@
+package ${package.Controller};
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.daizhihua.core.config.ResponseData;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import com.daizhihua.core.entity.QueryVo;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import com.daizhihua.core.res.Resut;
+import ${package.Service}.${table.serviceName};
+import ${package.Entity}.${entity};
+
+/**
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Slf4j
+@RestController
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    @Resource
+    private ${table.serviceName} ${table.entityPath}Service;
+
+    /**
+     * 分页查询数据
+     *
+     * @param pageable 分页参数
+     * @param queryVo 查询条件
+     * @return
+     */
+    @ApiOperation(value = "分页获取所有${table.entityPath}信息", notes = "获取所有${table.entityPath}信息")
+    @GetMapping
+    public Resut get${entity}List(Pageable pageable,QueryVo queryVo){
+        QueryWrapper<${entity}> query=new QueryWrapper<>();
+        try{
+            IPage<${entity}> pageList= ${table.entityPath}Service.page(new Page<>(pageable.getPageNumber(),pageable.getPageSize()),query);
+            return Resut.ok(pageList);
+        }catch(Exception e){
+            log.error("get${entity}List -=- {}",e.toString());
+            return Resut.error("系统异常");
+        }
+    }
+
+    /**
+     * 保存和修改公用的
+     * @param ${table.entityPath} 传递的实体
+     * @return 0 失败  1 成功
+     */
+    @ApiOperation(value = "${table.entityPath}新增/修改", notes = "${table.entityPath}新增/修改")
+    @PutMapping
+    public Resut addorupd(@RequestBody ${entity} ${table.entityPath}){
+        try{
+            boolean saveOrUpdate= ${table.entityPath}Service.saveOrUpdate(${table.entityPath});
+            return Resut.ok(saveOrUpdate);
+        }catch(Exception e){
+            log.error("${table.entityPath}Save -=- {}",e.toString());
+            return Resut.error("系统异常");
+        }
+    }
+
+    /**
+     * 根据${table.entityPath}id删除${entity}
+     * @param  ${table.entityPath}Id
+     * @return false 失败  true 成功
+     */
+    @ApiOperation(value = "${table.entityPath}删除", notes = "${table.entityPath}删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "${table.entityPath}Id",
+                    value = "删除${entity}操作",
+                    example = "",
+                    dataType = "String",
+                    required = true)
+    })
+    @DeleteMapping("/delete")
+    public Resut delete(@RequestParam("${table.entityPath}Id") String ${table.entityPath}Id){
+        ${entity} ${table.entityPath} = ${table.entityPath}Service.getById(${table.entityPath}Id);
+        try{
+            boolean saveOrUpdate= ${table.entityPath}Service.saveOrUpdate(${table.entityPath});
+            return Resut.ok(saveOrUpdate);
+        }catch(Exception e){
+            log.error("${table.entityPath}Delete -=- {}",e.toString());
+            return Resut.error("系统异常");
+        }
+    }
+
+    /**
+     * 批量删除${entity}
+     * @param ${table.entityPath}Ids
+     * @return false 失败  true 成功
+     */
+    @ApiOperation(value = "${table.entityPath}批量删除", notes = "${table.entityPath}批量删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "${table.entityPath}Ids",
+                    value = "删除${entity}操作",
+                    example = "",
+                    dataType = "List",
+                    required = true)
+    })
+    @DeleteMapping("/${table.entityPath}BatchDelete")
+    public Resut deleteBatchIds(@RequestParam("${table.entityPath}Ids") List<String> ${table.entityPath}Ids){
+        try{
+            boolean result= ${table.entityPath}Service.removeByIds(${table.entityPath}Ids);
+            return Resut.ok(result);
+        }catch(Exception e){
+            log.error("${table.entityPath}BatchDelete -=- {}",e.toString());
+            return Resut.error("系统异常");
+        }
+    }
+
+}
