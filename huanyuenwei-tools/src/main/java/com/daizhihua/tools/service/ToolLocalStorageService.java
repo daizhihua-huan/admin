@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  * 本地存储 服务类
@@ -20,5 +22,7 @@ public interface ToolLocalStorageService extends IService<ToolLocalStorage> {
     ToolLocalStorage create(String name, MultipartFile file);
 
     IPage<ToolLocalStorage>page(Pageable pageable, QueryVo queryVo);
+
+    void download(Pageable pageable, HttpServletResponse response);
 
 }

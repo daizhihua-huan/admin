@@ -6,6 +6,8 @@ import com.daizhihua.tools.entity.SysQuartzJob;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  * 定时任务 服务类
@@ -37,6 +39,7 @@ public interface SysQuartzJobService extends IService<SysQuartzJob> {
 
     Boolean saveJobs(SysQuartzJob sysQuartzJob);
 
+    void download(Pageable pageable, HttpServletResponse response);
 
 
 

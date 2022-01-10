@@ -7,6 +7,7 @@ import com.daizhihua.core.entity.SysJob;
 import com.daizhihua.core.entity.SysUsersJobs;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface JobService extends IService<SysJob> {
@@ -16,4 +17,6 @@ public interface JobService extends IService<SysJob> {
     List<SysUsersJobs> getUserJob(Long userId);
 
     IPage<SysJob> pageList(Pageable pageable, QueryVo queryVo);
+
+    void download(Pageable pageable, HttpServletResponse response);
 }

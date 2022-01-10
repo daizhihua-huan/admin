@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.ws.Service;
 import java.util.List;
 
@@ -82,5 +83,12 @@ public class MntServerController implements BaseController<MntServer> {
     public Resut testContent(@RequestBody MntServer mntServer){
 
         return Resut.ok(mntServerService.testContent(mntServer));
+    }
+
+    @Log(value = "导出服务器信息",type = LogActionType.SELECT)
+    @GetMapping(value = "download")
+    @ApiOperation(value = "导出服务器信息")
+    public void download(Pageable pageable, HttpServletResponse response){
+        mntServerService.download(pageable,response);
     }
 }

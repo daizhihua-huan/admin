@@ -1,21 +1,24 @@
 package com.daizhihua.manager.service.imple;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysDept;
 import com.daizhihua.core.mapper.SysDeptMapper;
+import com.daizhihua.core.util.FileUtil;
 import com.daizhihua.manager.entity.vo.DeptVo;
 import com.daizhihua.manager.service.DeptService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -57,6 +60,26 @@ public class DeptServiceImple extends ServiceImpl<SysDeptMapper,SysDept> impleme
             }
         });
         return list;
+    }
+
+    @Override
+    public void download(Pageable pageable, HttpServletResponse response) {
+//        IPage<SysDept> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        List<SysDept> deptList =this.list();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (SysDept deptDTO : deptList) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("部门名称", deptDTO.getName());
+            map.put("部门状态", deptDTO.getEnabled()==1 ? "启用" : "停用");
+            map.put("创建日期", deptDTO.getCreateTime());
+            list.add(map);
+        }
+        try {
+            FileUtil.downloadExcel(list, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public synchronized void tree( List<SysDept> list){

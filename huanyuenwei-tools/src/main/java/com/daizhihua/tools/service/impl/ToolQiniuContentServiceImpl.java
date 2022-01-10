@@ -30,8 +30,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -181,6 +185,28 @@ public class ToolQiniuContentServiceImpl extends ServiceImpl<ToolQiniuContentMap
             return toolQiniuContents.get(0);
         }
         return null;
+    }
+
+    @Override
+    public void download(Pageable pageable, HttpServletResponse response) {
+        IPage<ToolQiniuContent> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        List<ToolQiniuContent> records = this.page(page).getRecords();
+        List<Map<String,Object>> list = new ArrayList<>();
+        for (ToolQiniuContent record : records) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("文件名", record.getName());
+            map.put("文件类型", record.getSuffix());
+            map.put("空间名称", record.getBucket());
+            map.put("文件大小", record.getSize());
+            map.put("空间类型", record.getType());
+            map.put("创建日期", record.getUpdateTime());
+            list.add(map);
+        }
+        try {
+            FileUtil.downloadExcel(list,response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

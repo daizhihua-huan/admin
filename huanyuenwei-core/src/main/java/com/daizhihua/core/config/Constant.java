@@ -43,7 +43,7 @@ public class Constant {
     //包名称
     public static final String PACKAGENAME = "com.daizhihua.tools";
     //表名
-    public static final String[] TABLENAMES = {"code_column_config"};
+    public static final String[] TABLENAMES = {"message_image"};
 
     public static final long EXPIRATION_TIME = 7200;     // 2小时(以毫秒ms计)
     public static final String SECRET = "CodeSheepSecret";      // JWT密码
@@ -122,5 +122,15 @@ public class Constant {
     public static final String TOKEN = "https://open.ys7.com/api/lapp/token/get";
 
     public static final String LIST = "https://open.ys7.com/api/lapp/device/list";
+
+    public static final String PLAY = "https://open.ys7.com/api/lapp/v2/live/address/get";
+
+    public static final String DETECT = "https://open.ys7.com/api/lapp/intelligence/face/analysis/detect";
+
+
+    /**
+     *获取设备状态信息
+     */
+    public static final String DEVOICESTATUS = "https://open.ys7.com/api/lapp/device/status/get";
 
 }

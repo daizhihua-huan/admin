@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -88,9 +89,17 @@ public class QiNiuController {
 
     @Log(value = "删除七牛云",type = LogActionType.DELETE)
     @DeleteMapping
+    @ApiOperation(value = "删除七牛云",notes = "删除七牛云的信息")
     public Resut delete(@RequestBody List<Long> ids){
 //        toolQiniuContentService
         toolQiniuContentService.delete(ids);
         return Resut.ok();
+    }
+
+    @Log(value = "导出七牛云",type = LogActionType.SELECT)
+    @GetMapping(value = "download")
+    @ApiOperation(value = "导出七牛云")
+    public void download(Pageable pageable, HttpServletResponse response){
+        toolQiniuContentService.download(pageable,response);
     }
 }

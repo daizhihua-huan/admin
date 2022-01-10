@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(value = "oss存储")
@@ -72,8 +73,8 @@ public class OssController {
 
     @Log(value = "下载文件")
     @ApiOperation(value = "下载文件")
-    @GetMapping(value = "download")
-    public void dowload(Long id){
+    @GetMapping(value = "downloadFile")
+    public void dowloadFile(Long id){
 
         toolOssContentService.download(toolOssConfigService.getOssClient(),toolOssConfigService.getToolOssConfig(),id);
 //        return Resut.ok();
@@ -93,6 +94,15 @@ public class OssController {
     public Resut getConfig(){
 
         return Resut.ok(toolOssConfigService.getOne(null));
+    }
+
+    @Log(value = "导出oss存储")
+    @GetMapping(value = "download")
+    @ApiOperation(value = "导出oss存储")
+    public void download(Pageable pageable, HttpServletResponse response){
+        log.info("导出oss存储");
+//        toolOssContentService.page(pageable);
+        toolOssContentService.download(pageable,response);
     }
 
 }

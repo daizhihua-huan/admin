@@ -46,4 +46,11 @@ public class DicDetailServiceImple extends ServiceImpl<SysDictDetailMapper, SysD
         sysDictDetailQueryWrapper.in("dict_id",list);
         return this.page(page,sysDictDetailQueryWrapper);
     }
+
+    @Override
+    public List<SysDictDetail> getDicDetailForDictId(Long dictId) {
+        QueryWrapper<SysDictDetail> sysDictDetailQueryWrapper = new QueryWrapper<>();
+        sysDictDetailQueryWrapper.in("dict_id",dictId);
+        return this.list(sysDictDetailQueryWrapper);
+    }
 }

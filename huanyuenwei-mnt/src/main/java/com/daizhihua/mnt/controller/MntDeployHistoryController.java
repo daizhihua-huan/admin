@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(tags = "备份管理")
@@ -38,5 +39,9 @@ public class MntDeployHistoryController {
         return Resut.ok();
     }
 
-
+    @GetMapping(value = "download")
+    @ApiOperation(value = "导出部署备份信息")
+    public void download(Pageable pageable, HttpServletResponse response){
+        mntDeployHistoryService.download(pageable,response);
+    }
 }

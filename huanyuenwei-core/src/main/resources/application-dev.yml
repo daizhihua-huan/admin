@@ -2,6 +2,7 @@ server:
   port: 8090
   servlet:
     context-path: /api
+  max-http-header-size: 1024000
 
 
 spring:

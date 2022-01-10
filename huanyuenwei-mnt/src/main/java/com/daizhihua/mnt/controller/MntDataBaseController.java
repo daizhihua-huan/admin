@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.UUID;
 
@@ -101,5 +102,12 @@ public class MntDataBaseController implements BaseController<MntDatabase> {
         log.info("参数:{}",database);
         return Resut.ok();
     }
+
+    @GetMapping(value = "download")
+    @ApiOperation(value = "导出数据库管理")
+    public void download(Pageable pageable, HttpServletResponse response){
+        mntDatabaseService.download(pageable,response);
+    }
+
 
 }

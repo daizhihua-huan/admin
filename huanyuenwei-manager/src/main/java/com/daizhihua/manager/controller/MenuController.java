@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(tags = "菜单")
@@ -112,4 +113,11 @@ public class MenuController implements BaseController<SysMenu> {
         sysMenu.setUpdateTime(DateUtils.getDateTime());
         return Resut.ok(menuService.updateById(sysMenu));
     }
+
+    @ApiOperation(value = "导出",notes = "导出菜单")
+    @GetMapping(value = "download")
+    public void download(Pageable pageable, HttpServletResponse response){
+        menuService.download(pageable,response);
+    }
+
 }

@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -33,4 +34,6 @@ public interface ToolOssContentService extends IService<ToolOssContent> {
     void download(OSS ossClient,ToolOssConfig toolOssConfig,Long id);
 
     void sync(OSS ossClient,ToolOssConfig toolOssConfig);
+
+    void download(Pageable pageable, HttpServletResponse response);
 }

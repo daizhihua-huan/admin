@@ -1,11 +1,13 @@
 package com.daizhihua.log.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.util.DateUtils;
+import com.daizhihua.core.util.FileUtil;
 import com.daizhihua.core.util.StringUtils;
 import com.daizhihua.log.entity.SysLog;
 import com.daizhihua.log.mapper.SysLogMapper;
@@ -18,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -107,5 +109,37 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         QueryWrapper<SysLog> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("log_type","INFO");
         return this.remove(queryWrapper);
+    }
+
+    @Override
+    public void download(Pageable pageable, HttpServletResponse response,String type) {
+        IPage<SysLog> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        QueryWrapper<SysLog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("log_type",type);
+        List<SysLog> records = this.page(page,queryWrapper).getRecords();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (SysLog log : records) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("用户名", log.getUsername());
+            map.put("IP", log.getRequestIp());
+            map.put("IP来源", log.getAddress());
+            map.put("描述", log.getDescription());
+            map.put("浏览器", log.getBrowser());
+            map.put("请求耗时/毫秒", log.getTime());
+            boolean notNull = ObjectUtil.isNotNull(log.getExceptionDetail());
+            if(notNull){
+                map.put("异常详情", new String(log.getExceptionDetail().getBytes()));
+            }else{
+                map.put("异常详情", new String("".getBytes()));
+            }
+
+            map.put("创建日期", log.getCreateTime());
+            list.add(map);
+        }
+        try {
+            FileUtil.downloadExcel(list, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

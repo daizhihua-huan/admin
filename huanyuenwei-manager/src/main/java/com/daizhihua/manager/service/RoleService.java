@@ -1,15 +1,17 @@
 package com.daizhihua.manager.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysRole;
 import com.daizhihua.core.entity.SysUsersRoles;
 import com.daizhihua.manager.entity.vo.RoleVo;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public interface RoleService {
+public interface RoleService extends IService<SysRole> {
 
     IPage<SysRole> listRoles(Pageable pageable, QueryVo queryVo);
 
@@ -30,5 +32,7 @@ public interface RoleService {
     List<SysRole> getRoleForId(Long userId);
 
     void editMenuForRoleId(RoleVo roleVo);
+
+    void download(Pageable pageable, HttpServletResponse response);
 
 }

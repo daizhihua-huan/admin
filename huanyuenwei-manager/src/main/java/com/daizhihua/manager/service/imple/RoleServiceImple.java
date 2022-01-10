@@ -4,13 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.daizhihua.core.entity.QueryVo;
-import com.daizhihua.core.entity.SysRole;
-import com.daizhihua.core.entity.SysRolesMenus;
-import com.daizhihua.core.entity.SysUsersRoles;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.daizhihua.core.entity.*;
 import com.daizhihua.core.mapper.SysRoleMapper;
 import com.daizhihua.core.mapper.SysRolesMenusMapper;
 import com.daizhihua.core.mapper.SysUsersRolesMapper;
+import com.daizhihua.core.util.FileUtil;
 import com.daizhihua.manager.entity.vo.RoleVo;
 import com.daizhihua.manager.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +19,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @Slf4j
 @Service
-public class RoleServiceImple implements RoleService {
+public class RoleServiceImple extends ServiceImpl<SysRoleMapper,SysRole> implements RoleService{
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
@@ -119,6 +117,26 @@ public class RoleServiceImple implements RoleService {
             sysRolesMenus.setRoleId(roleVo.getId());
             sysRolesMenus.setMenuId(menuId);
             sysRolesMenusMapper.insert(sysRolesMenus);
+        }
+    }
+
+    @Override
+    public void download(Pageable pageable, HttpServletResponse response) {
+        IPage<SysRole> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        List<SysRole> records = this.page(page).getRecords();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (SysRole role : records) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            map.put("角色名称", role.getName());
+            map.put("角色级别", role.getLevel());
+            map.put("描述", role.getDescription());
+            map.put("创建日期", role.getCreateTime());
+            list.add(map);
+        }
+        try {
+            FileUtil.downloadExcel(list, response);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

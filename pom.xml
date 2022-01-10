@@ -35,6 +35,7 @@
         <module>huanyuenwei-log</module>
         <module>huanyuenwei-mnt</module>
         <module>huanyuenwei-video</module>
+        <module>huanyuenwei-netty</module>
     </modules>
 
     <properties>
@@ -49,6 +50,7 @@
         <security.version>2.3.2.RELEASE</security.version>
         <jwwt.version>0.9.0</jwwt.version>
         <redis.version>2.4.5</redis.version>
+        <netty.version>4.1.30.Final</netty.version>
     </properties>
 
     <dependencyManagement>
@@ -84,7 +86,11 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${durid.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>

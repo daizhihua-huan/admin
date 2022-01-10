@@ -7,6 +7,7 @@ import com.daizhihua.core.res.Resut;
 import com.daizhihua.core.util.DateUtils;
 import com.daizhihua.core.exception.BadRequestException;
 import com.daizhihua.core.util.SecurityUtils;
+import com.daizhihua.log.annotation.Log;
 import com.daizhihua.tools.entity.SysQuartzJob;
 import com.daizhihua.tools.service.SysQuartzJobService;
 import com.daizhihua.tools.service.SysQuartzLogService;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
@@ -80,7 +82,8 @@ public class JobsController implements BaseController<SysQuartzJob> {
         return null;
     }
 
-    @ApiOperation(value = "更新")
+    @Log(value = "更新任务调度")
+    @ApiOperation(value = "更新任务调度")
     @PutMapping
     @Override
     public Resut update(@RequestBody SysQuartzJob sysQuartzJob) {
@@ -109,6 +112,12 @@ public class JobsController implements BaseController<SysQuartzJob> {
         log.info("查询参数是:{}",queryVo);
         log.info("{}",isSuccess);
         return Resut.ok( sysQuartzLogService.page(pageable,queryVo,isSuccess));
+    }
+
+    @ApiOperation(value = "导出任务调度")
+    @GetMapping(value = "/download")
+    public void download(Pageable pageable, HttpServletResponse response){
+        sysQuartzJobService.download(pageable,response);
     }
 
 }

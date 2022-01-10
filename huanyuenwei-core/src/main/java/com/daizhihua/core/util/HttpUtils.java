@@ -47,6 +47,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import sun.misc.BASE64Encoder;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
@@ -182,11 +183,8 @@ public class HttpUtils {
 
             if (params != null) {
                 for (String key : params.keySet()) {
-
                     builder.addPart(key, new StringBody(params.get(key),
                             ContentType.create("text/plain", Consts.UTF_8)));
-
-
                 }
             }
             HttpEntity reqEntity = builder.build();
@@ -210,22 +208,20 @@ public class HttpUtils {
         }
         return new JSONObject(resultString);
     }
-
-    private static   byte[] intToByteArray(int i) {
-        byte[] result = new byte[4];
-        //由高位到低位
-        result[0] = (byte)((i >> 24) & 0xFF);
-        result[1] = (byte)((i >> 16) & 0xFF);
-        result[2] = (byte)((i >> 8) & 0xFF);
-        result[3] = (byte)(i & 0xFF);
-        return result;
+    public static String imageToBase64(String path) {
+        InputStream in = null;
+        byte[] data = null;
+        try {
+            in = new FileInputStream(path);
+            data = new byte[in.available()];
+            in.read(data);
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BASE64Encoder encoder = new BASE64Encoder();
+        return encoder.encode(data);
     }
-//
-//    public static void main(String[] args) {
-//        Map<String, String> params = new HashMap<>();
-//        params.put("appKey","7a3d2345e1e049b59e5e11e79e82f7b5");
-//        params.put("appSecret","0cb247064bc4299f5b114f5d92bfea31");
-//        JSONObject jsonObject = doPostForm("https://open.ys7.com/api/lapp/token/get", params);
-//        System.out.println(jsonObject);
-//    }
+
+
 }

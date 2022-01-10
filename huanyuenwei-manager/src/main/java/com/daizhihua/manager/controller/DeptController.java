@@ -13,8 +13,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -70,4 +72,14 @@ public class DeptController implements BaseController<SysDept> {
         log.info("参数是:{}",sysDept);
         return Resut.ok(deptService.updateById(sysDept));
     }
+
+    @Log(value = "导出部门信息",type = LogActionType.SELECT)
+    @ApiOperation(value = "导出",notes = "导出部门信息")
+    @GetMapping(value = "download")
+    public void download(Pageable pageable, HttpServletResponse response){
+
+        deptService.download(pageable,response);
+
+    }
+
 }

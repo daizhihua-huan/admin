@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Slf4j
@@ -78,6 +79,13 @@ public class LocalStorageController {
         }
 
         return Resut.ok( localStorageService.create(file.getOriginalFilename(),file));
+    }
+
+    @ApiOperation(value = "导出本地图片")
+    @GetMapping(value = "download")
+    @Log(value = "导出本地图片")
+    public void download(Pageable pageable, HttpServletResponse response){
+        localStorageService.download(pageable,response);
     }
 
 }

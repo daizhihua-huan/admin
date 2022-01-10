@@ -1,21 +1,36 @@
 package com.daizhihua.manager.controller;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.daizhihua.core.config.FileProperties;
+import com.daizhihua.core.entity.SysJob;
 import com.daizhihua.core.entity.SysUser;
+import com.daizhihua.core.exception.BadRequestException;
 import com.daizhihua.core.res.Resut;
 
+import com.daizhihua.core.util.*;
 import com.daizhihua.log.annotation.Log;
 import com.daizhihua.log.annotation.LogActionType;
+import com.daizhihua.manager.entity.vo.UserPassVo;
 import com.daizhihua.manager.entity.vo.UserVo;
 import com.daizhihua.manager.service.SystemUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +43,7 @@ public class UserController  {
 
     @Autowired
     private SystemUserService systemUserService;
+
 
 
     /**
@@ -111,5 +127,42 @@ public class UserController  {
         systemUserService.update(enabled,userId);
         return Resut.ok();
     }
+
+    @ApiOperation(value = "修改在线头像")
+    @PostMapping(value = "updateAvatar")
+    public Resut updateAvatar(@RequestParam("id")Long id, @RequestParam("avatar") MultipartFile avatar){
+        log.info("avater是:{}",avatar);
+        log.info("用户的id是:{}",id);
+        systemUserService.updateAvater(id,avatar);
+        return Resut.ok();
+    }
+
+    @ApiOperation(value = "修改用户信息")
+    @PutMapping(value = "center")
+    public Resut center(@RequestBody SysUser sysUser){
+        log.info("用户信息是:{}",sysUser);
+        return Resut.ok(systemUserService.updateById(sysUser));
+    }
+
+    @ApiOperation(value = "修改密码")
+    @PostMapping(value = "updatePass")
+    public Resut updatePass(@RequestBody UserPassVo userPassVo) throws Exception {
+        systemUserService.updatePassword(userPassVo);
+        return Resut.ok();
+    }
+
+    @ApiOperation(value = "导出用户",notes = "导出用户的excle")
+    @GetMapping(value = "download")
+    public void download(Pageable pageable, HttpServletResponse response){
+        log.info("{}",pageable);
+        IPage<SysUser> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        List<SysUser> userPage = systemUserService.page(page).getRecords();
+        try {
+            systemUserService.download(userPage,response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

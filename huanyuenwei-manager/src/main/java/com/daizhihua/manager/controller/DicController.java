@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(tags = "字典")
@@ -78,4 +79,12 @@ public class DicController implements BaseController<SysDict> {
         sysDict.setUpdateTime(DateUtils.getDateTime());
         return Resut.ok(dictService.updateById(sysDict));
     }
+
+    @Log(value = "导出数据字典",type = LogActionType.SELECT)
+    @ApiOperation(value = "导出数据字典",notes = "导出数据字典")
+    @GetMapping(value = "download")
+    public void download(Pageable pageable, HttpServletResponse response){
+        dictService.download(pageable,response);
+    }
+
 }

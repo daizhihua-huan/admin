@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Api(tags = "部署管理")
@@ -100,6 +101,13 @@ public class DeployController implements BaseController<MntDeploy> {
         mntDeployService.start(mntDeploy);
         return Resut.ok();
     }
+
+    @ApiOperation(value = "导出部署管理")
+    @GetMapping(value = "download")
+    public void download(Pageable pageable, HttpServletResponse response){
+        mntDeployService.download(pageable,response);
+    }
+
 
 
 

@@ -21,7 +21,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -81,5 +87,27 @@ public class ToolLocalStorageServiceImpl extends ServiceImpl<ToolLocalStorageMap
             queryWrapper.between("create_time",queryVo.getCreateTime().get(0),queryVo.getCreateTime().get(1));
         }
         return  this.page(page,queryWrapper);
+    }
+
+    @Override
+    public void download(Pageable pageable, HttpServletResponse response) {
+        IPage<ToolLocalStorage> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        List<ToolLocalStorage> records = this.page(page).getRecords();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (ToolLocalStorage localStorageDTO : records) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("文件名", localStorageDTO.getRealName());
+            map.put("备注名", localStorageDTO.getName());
+            map.put("文件类型", localStorageDTO.getType());
+            map.put("文件大小", localStorageDTO.getSize());
+            map.put("创建者", localStorageDTO.getCreateBy());
+            map.put("创建日期", localStorageDTO.getCreateTime());
+            list.add(map);
+        }
+        try {
+            FileUtil.downloadExcel(list, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

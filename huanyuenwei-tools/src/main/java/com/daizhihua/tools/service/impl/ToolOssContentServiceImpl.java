@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -150,6 +150,27 @@ public class ToolOssContentServiceImpl extends ServiceImpl<ToolOssContentMapper,
                 ossContentByName.setSuffix(FileUtil.getExtensionName(sum.getKey()));
                 this.save(ossContentByName);
             }
+        }
+    }
+
+    @Override
+    public void download(Pageable pageable, HttpServletResponse response) {
+        Page<ToolOssContent> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        List<ToolOssContent> records = this.page(page).getRecords();
+        List<Map<String,Object>> list = new ArrayList<>();
+        for (ToolOssContent record : records) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("文件名", record.getName());
+            map.put("文件类型", record.getSuffix());
+            map.put("空间名称", record.getBucketName());
+            map.put("文件大小", record.getSize());
+            map.put("创建日期", record.getUpdateTime());
+            list.add(map);
+        }
+        try {
+            FileUtil.downloadExcel(list,response);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

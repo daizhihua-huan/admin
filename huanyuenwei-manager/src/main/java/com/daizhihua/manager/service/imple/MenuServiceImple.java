@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysMenu;
+import com.daizhihua.core.util.FileUtil;
 import com.daizhihua.manager.entity.vo.MenuMetaVo;
 import com.daizhihua.manager.entity.vo.MenuVo;
 import com.daizhihua.manager.service.MenuService;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -147,6 +150,30 @@ public class MenuServiceImple extends ServiceImpl<SysMenuMapper, SysMenu> implem
             queryWrapper.between("create_time",queryVo.getCreateTime().get(0),queryVo.getCreateTime().get(1));
         }
         return  sysMenuMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public void download(Pageable pageable, HttpServletResponse response) {
+        IPage<SysMenu> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        List<SysMenu> records = this.page(page).getRecords();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (SysMenu menuDTO : records) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("菜单标题", menuDTO.getTitle());
+            map.put("菜单类型", menuDTO.getType() == null ? "目录" : menuDTO.getType() == 1 ? "菜单" : "按钮");
+            map.put("权限标识", menuDTO.getPermission());
+            map.put("外链菜单", menuDTO.getIFrame() ? "是" : "否");
+            map.put("菜单可见", menuDTO.getHidden() ? "否" : "是");
+            map.put("是否缓存", menuDTO.getCache() ? "是" : "否");
+            map.put("创建日期", menuDTO.getCreateTime());
+            list.add(map);
+        }
+        try {
+            FileUtil.downloadExcel(list, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

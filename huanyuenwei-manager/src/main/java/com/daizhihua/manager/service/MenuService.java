@@ -6,6 +6,7 @@ import com.daizhihua.core.entity.SysMenu;
 import com.daizhihua.manager.entity.vo.MenuVo;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface MenuService extends IService<SysMenu> {
@@ -36,5 +37,7 @@ public interface MenuService extends IService<SysMenu> {
     List<SysMenu> getAllMenus();
 
     List<SysMenu> getAllMenusForPage(Pageable pageable, QueryVo queryVo);
+
+    void download(Pageable pageable, HttpServletResponse response);
 
 }

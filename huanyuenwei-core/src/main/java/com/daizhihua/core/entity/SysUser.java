@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.daizhihua.core.util.DateUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -111,6 +112,10 @@ public class SysUser extends Model<SysUser> {
     @ApiModelProperty(value = "密码过期:1过期、0没有")
     @TableField("credentials_nonExpired")
     private int credentialsNonExpired;
+
+    @ApiModelProperty(value = "部门名称")
+    @TableField(exist = false)
+    private String deptName;
 
     @TableField(exist = false)
     private List<SysMenu> list;

@@ -31,7 +31,7 @@ public class SysQuartzLog extends Model<SysQuartzLog> {
 
     private String beanName;
 
-    private LocalDateTime createTime;
+    private String createTime;
 
     private String cronExpression;
 

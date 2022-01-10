@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(tags = "岗位接口")
@@ -82,5 +84,12 @@ public class JobController implements BaseController<SysJob> {
         sysJob.setUpdateBy(SecurityUtils.getCurrentUsername());
         sysJob.setUpdateTime(DateUtils.getDateTime());
         return Resut.ok(jobService.updateById(sysJob));
+    }
+
+    @GetMapping(value = "download")
+    @ApiOperation(value = "导出",notes = "导出岗位")
+    @Log(value = "导出岗位",type = LogActionType.SELECT)
+    public void download(Pageable pageable, HttpServletResponse response){
+        jobService.download(pageable,response);
     }
 }

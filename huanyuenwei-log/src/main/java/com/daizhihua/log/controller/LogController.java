@@ -3,6 +3,8 @@ package com.daizhihua.log.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.res.Resut;
+import com.daizhihua.log.annotation.Log;
+import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.log.entity.SysLog;
 import com.daizhihua.log.service.SysLogService;
 import io.swagger.annotations.Api;
@@ -11,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Api(value = "日志")
 @RestController
@@ -57,6 +61,20 @@ public class LogController {
     public Resut delError(){
         log.info("清空异常日志");
         return Resut.ok(sysLogService.delete("ERROR"));
+    }
+
+    @Log(value = "操作日志导出",type = LogActionType.SELECT)
+    @GetMapping(value = "download")
+    @ApiOperation(value = "下载")
+    public void download(Pageable pageable, HttpServletResponse response){
+        sysLogService.download(pageable,response,"INFO");
+    }
+
+    @Log(value = "异常日志导出")
+    @GetMapping(value = "error/download")
+    @ApiOperation(value = "导出异常日志")
+    public void errorDownload(Pageable pageable, HttpServletResponse response){
+        sysLogService.download(pageable,response,"ERROR");
     }
 
 }

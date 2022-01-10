@@ -1,5 +1,7 @@
 package com.daizhihua.manager.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.daizhihua.core.controllers.BaseController;
 import com.daizhihua.core.entity.QueryVo;
 import com.daizhihua.core.entity.SysRole;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,6 +88,11 @@ public  class RoleController implements BaseController<SysRole> {
         return Resut.ok();
     }
 
+    @Override
+    public Resut delete(Long id) {
+        return null;
+    }
+
     @Log(value = "修改菜单",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新菜单")
     @RequestMapping(value = "menu",method = RequestMethod.POST)
@@ -96,25 +104,31 @@ public  class RoleController implements BaseController<SysRole> {
     }
 
 
-    @RequestMapping(value = "deleteRole",method = RequestMethod.GET)
-    @Override
-    public Resut delete(Long id) {
-        if( roleService.countRoleForId(id)>0){
-            return Resut.error("当前角色和用户关联不能删除");
+    @ApiOperation(value = "删除角色")
+    @DeleteMapping
+    public Resut delete(@RequestBody  List<Long>ids) {
+        for (Long id: ids){
+            if( roleService.countRoleForId(id)>0){
+                return Resut.error("当前角色和用户关联不能删除");
+            }
+            roleService.deleteRole(id);
         }
-
-
-        roleService.deleteRole(id);
         return Resut.ok();
     }
 
     @Log(value = "更新角色",type = LogActionType.UPDATE)
     @ApiOperation(value = "更新角色")
-    @RequestMapping(value = "updateRole",method = RequestMethod.POST)
+    @PutMapping
     @Override
     public Resut update(@RequestBody SysRole sysRole) {
         roleService.updateRole(sysRole);
         return Resut.ok();
+    }
+
+    @GetMapping(value = "download")
+    @ApiOperation(value = "导出",notes = "导出角色信息")
+    public void download(Pageable pageable, HttpServletResponse response){
+        roleService.download(pageable,response);
     }
 
     /**

@@ -78,6 +78,7 @@ public class UserServiceImple implements UserDetailsService {
             List<SysMenu> sysMenu = sysMenuMapper.listMenu(sysUser.getUserId());
             sysUser.setList(sysMenu);
             sysUser = getSysUser();
+            sysUser.setDeptName(sysDeptMapper.selectById(sysUser.getDeptId()).getName());
         }
         return sysUser;
     }
