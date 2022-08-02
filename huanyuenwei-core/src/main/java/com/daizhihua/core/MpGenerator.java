@@ -20,7 +20,8 @@ import java.util.Map;
         "com.daizhihua.manager.mapper",
         "com.daizhihua.tools.mapper",
         "com.daizhihua.log.mapper",
-        "com.daizhihua.mnt.mapper"
+        "com.daizhihua.mnt.mapper",
+        "com.daizhihua.system.mapper"
 })
 public class MpGenerator {
 

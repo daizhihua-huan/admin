@@ -22,7 +22,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     @Select("SELECT  s.user_id as userId,s.dept_id as deptId,username,nick_name as nickName,gender,phone," +
             "email,avatar_name as avatarName,avatar_path as avatarPath,is_admin as isAdmin,s.enabled,s.create_by as createBy," +
-            "s.update_by as updateBy,pwd_reset_time as pwdResetTime,s.create_time as createTime,s.update_time as updateTime,expired_time as expiredTime, \n" +
+            "s.update_by as updateBy,pwd_reset_time as pwdResetTime,s.number,s.create_time as createTime,s.update_time as updateTime,expired_time as expiredTime, \n" +
             "d.name " +
             "from sys_user s \n" +
             "join sys_dept d\n" +
@@ -68,7 +68,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
             "<script>",
             "SELECT  s.user_id as userId,s.dept_id as deptId,username,nick_name as nickName,gender,phone,",
             "email,avatar_name as avatarName,avatar_path as avatarPath,is_admin as isAdmin,s.enabled,s.create_by as createBy,",
-            "s.update_by as updateBy,pwd_reset_time as pwdResetTime,s.create_time as createTime,s.update_time as updateTime,expired_time as expiredTime, \n",
+            "s.update_by as updateBy,pwd_reset_time as pwdResetTime,s.number,s.create_time as createTime,s.update_time as updateTime,expired_time as expiredTime, \n",
             "d.name ",
             "from sys_user s \n",
             "join sys_dept d\n",
@@ -90,7 +90,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
             "<script>",
             "SELECT  s.user_id as userId,s.user_id as id,s.dept_id as deptId,username,nick_name as nickName,gender,phone,",
             "email,avatar_name as avatarName,avatar_path as avatarPath,is_admin as isAdmin,s.enabled,s.create_by as createBy,",
-            "s.update_by as updateBy,pwd_reset_time as pwdResetTime,s.create_time as createTime,s.update_time as updateTime,expired_time as expiredTime, \n",
+            "s.update_by as updateBy,pwd_reset_time as pwdResetTime,s.number,s.create_time as createTime,s.update_time as updateTime,expired_time as expiredTime, \n",
             "d.name ",
             "from sys_user s \n",
             "join sys_dept d\n",

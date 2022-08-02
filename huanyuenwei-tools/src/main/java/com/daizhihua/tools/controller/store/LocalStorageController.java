@@ -56,8 +56,7 @@ public class LocalStorageController {
     public Resut dowload(@RequestParam String name, @RequestParam("file") MultipartFile file){
         log.info("name是:{}",name);
         log.info("file是:{}",file.getOriginalFilename());
-        localStorageService.create(name,file);
-        return Resut.ok();
+        return Resut.ok( localStorageService.create(name,file));
     }
 
     @Log(value = "修改图片",type = LogActionType.UPDATE)

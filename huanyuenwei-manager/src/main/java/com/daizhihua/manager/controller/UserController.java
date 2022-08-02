@@ -1,16 +1,12 @@
 package com.daizhihua.manager.controller;
 
 
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.daizhihua.core.config.FileProperties;
-import com.daizhihua.core.entity.SysJob;
+import com.daizhihua.core.annotion.AnonymousAccess;
 import com.daizhihua.core.entity.SysUser;
-import com.daizhihua.core.exception.BadRequestException;
 import com.daizhihua.core.res.Resut;
-
-import com.daizhihua.core.util.*;
+import com.daizhihua.core.util.DateUtils;
 import com.daizhihua.log.annotation.Log;
 import com.daizhihua.log.annotation.LogActionType;
 import com.daizhihua.manager.entity.vo.UserPassVo;
@@ -19,17 +15,12 @@ import com.daizhihua.manager.service.SystemUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +34,6 @@ public class UserController  {
 
     @Autowired
     private SystemUserService systemUserService;
-
-
 
     /**
      * 获取用户列表分三种情况
@@ -87,8 +76,6 @@ public class UserController  {
         return Resut.ok(map);
     }
 
-
-
     @Log(value = "用户新增",type = LogActionType.ADD)
     @ApiOperation(value = "添加")
     @PostMapping
@@ -99,7 +86,6 @@ public class UserController  {
             systemUserService.add(sysUser);
             return Resut.ok();
         }
-
     }
 
     @Log(value = "删除用户",type = LogActionType.DELETE)
@@ -121,12 +107,14 @@ public class UserController  {
         systemUserService.updateForUser(sysUser);
         return Resut.ok();
     }
+
     @ApiOperation(value = "更新禁用和激活")
     @RequestMapping(value = "updateEnable",method = RequestMethod.POST)
     public Resut updateEnable(Long enabled, Long userId){
         systemUserService.update(enabled,userId);
         return Resut.ok();
     }
+
 
     @ApiOperation(value = "修改在线头像")
     @PostMapping(value = "updateAvatar")
@@ -135,6 +123,38 @@ public class UserController  {
         log.info("用户的id是:{}",id);
         systemUserService.updateAvater(id,avatar);
         return Resut.ok();
+    }
+
+
+    @AnonymousAccess
+    @ApiOperation(value = "查询用户聊天次数")
+    @GetMapping(value = "getNumberForUserId/{id}")
+    public Resut getNumberForUserId(@PathVariable Long id){
+        SysUser sysUser = systemUserService.getById(id);
+        return Resut.ok(sysUser);
+    }
+
+    @AnonymousAccess
+    @ApiOperation(value = "修改用户聊天次数")
+    @GetMapping(value = "setNumberForUserId/{id}")
+    public Resut setNumberForUserId(@PathVariable Long id){
+        SysUser sysUser = systemUserService.getById(id);
+        if(sysUser!=null){
+            String number = sysUser.getNumber();
+            int data = Integer.parseInt(number)-1;
+            sysUser.setNumber(String.valueOf(data));
+            sysUser.setUpdateTime(DateUtils.getDateTime());
+            systemUserService.updateById(sysUser);
+        }
+        return Resut.ok();
+    }
+
+    @AnonymousAccess
+    @ApiOperation(value = "查询用户")
+    @PostMapping(value = "pageUser")
+    public Resut pageUser(@RequestBody Pageable pageable){
+        IPage<SysUser> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        return Resut.ok(systemUserService.page(page));
     }
 
     @ApiOperation(value = "修改用户信息")
@@ -163,6 +183,4 @@ public class UserController  {
             e.printStackTrace();
         }
     }
-
-
 }

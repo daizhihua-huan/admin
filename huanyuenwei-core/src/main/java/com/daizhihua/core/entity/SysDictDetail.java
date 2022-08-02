@@ -54,6 +54,7 @@ public class SysDictDetail extends Model<SysDictDetail> {
     @ApiModelProperty(value = "更新时间")
     private String updateTime;
 
+
     public Long getId(){
         return this.detailId;
     }

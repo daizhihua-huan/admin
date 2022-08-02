@@ -29,13 +29,14 @@
         <module>huanyuenwei-core</module>
         <module>huanyuenwei-manager</module>
         <module>huanyuenwei-order</module>
-        <module>huanyuenwei-oauth</module>
+        <module>huanyuenwei-auth</module>
         <module>huanyuenwei-exception</module>
         <module>huanyuenwei-tools</module>
         <module>huanyuenwei-log</module>
         <module>huanyuenwei-mnt</module>
         <module>huanyuenwei-video</module>
         <module>huanyuenwei-netty</module>
+        <module>huanyuenwei-system</module>
     </modules>
 
     <properties>

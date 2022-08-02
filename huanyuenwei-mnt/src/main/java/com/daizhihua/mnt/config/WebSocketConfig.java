@@ -10,15 +10,17 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+import javax.annotation.Resource;
+
 
 @EnableWebSocket
 @Configuration
 @Slf4j
 public class WebSocketConfig implements WebSocketConfigurer {
-    @Autowired
+    @Resource
     private WebShellWebSocketHandler webSocketHandler;
 
-    @Autowired
+    @Resource
     private WebSocketInterceptor webSocketInterceptor;
 
     @Override

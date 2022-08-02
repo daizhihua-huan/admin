@@ -90,6 +90,7 @@ public class SysUser extends Model<SysUser> {
     private String updateBy;
 
     @ApiModelProperty(value = "修改密码的时间")
+    @TableField(value = "pwd_reset_time")
     private String pwdResetTime;
 
     @ApiModelProperty(value = "创建日期")
@@ -112,6 +113,10 @@ public class SysUser extends Model<SysUser> {
     @ApiModelProperty(value = "密码过期:1过期、0没有")
     @TableField("credentials_nonExpired")
     private int credentialsNonExpired;
+
+    @ApiModelProperty(value = "次数")
+    @TableField(value = "number")
+    private String number;
 
     @ApiModelProperty(value = "部门名称")
     @TableField(exist = false)

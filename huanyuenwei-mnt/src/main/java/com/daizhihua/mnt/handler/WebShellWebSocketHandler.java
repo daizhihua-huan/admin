@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
+import javax.annotation.Resource;
+
 /**
  * websocket的处理器
  */
@@ -14,7 +16,7 @@ import org.springframework.web.socket.*;
 @Component
 public class WebShellWebSocketHandler implements WebSocketHandler {
 
-    @Autowired
+    @Resource
     private WebShellService webShellService;
 
     /**

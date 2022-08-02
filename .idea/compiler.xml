@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="huanyuenwei-exception" />
+        <module name="huanyuenwei-netty" />
+        <module name="huanyuenwei-log" />
+        <module name="huanyuenwei-manager" />
+        <module name="huanyuenwei-tools" />
+        <module name="huanyuenwei-mnt" />
+        <module name="huanyuenwei-core" />
+        <module name="huanyuenwei-system" />
+        <module name="huanyuenwei-order" />
+        <module name="huanyuenwei-video" />
+        <module name="huanyuenwei-auth" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="com.huanyuenwei" options="" />
+      <module name="huanyuenwei-auth" options="-parameters" />
+      <module name="huanyuenwei-core" options="-parameters" />
+      <module name="huanyuenwei-exception" options="-parameters" />
+      <module name="huanyuenwei-log" options="-parameters" />
+      <module name="huanyuenwei-manager" options="-parameters" />
+      <module name="huanyuenwei-mnt" options="-parameters" />
+      <module name="huanyuenwei-netty" options="-parameters" />
+      <module name="huanyuenwei-order" options="-parameters" />
+      <module name="huanyuenwei-system" options="-parameters" />
+      <module name="huanyuenwei-tools" options="-parameters" />
+      <module name="huanyuenwei-video" options="-parameters" />
+    </option>
+  </component>
+</project>

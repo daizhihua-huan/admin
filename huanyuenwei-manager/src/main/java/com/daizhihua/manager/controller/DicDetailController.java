@@ -32,7 +32,7 @@ public class DicDetailController implements BaseController<SysDictDetail> {
     @GetMapping(value = "/getForName")
     public Resut getDetail(String dictName, Pageable page){
 
-        return Resut.ok( dictService.getDictDetailForName(dictName));
+        return Resut.ok(dictService.getDictDetailForName(dictName));
     }
 
     @ApiOperation(value = "查询",notes = "数据字典查询")

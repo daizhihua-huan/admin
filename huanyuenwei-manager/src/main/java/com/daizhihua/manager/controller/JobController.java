@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,7 @@ public class JobController implements BaseController<SysJob> {
     @Autowired
     private JobService jobService;
     @ApiOperation(value = "查询所有岗位")
+    @PreAuthorize("@el.check('dept:list')")
     @RequestMapping(value = "listJob",method = RequestMethod.GET)
     public Resut listJob(){
         return Resut.ok(jobService.listJob());

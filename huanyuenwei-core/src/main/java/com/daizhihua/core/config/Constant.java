@@ -39,11 +39,11 @@ public class Constant {
     public static final String CONTROLLER_JAVA_VM = "/templates/controller.java.vm" ;
 
     //项目名称
-    public static final String PROJECTNAME = "huanyuenwei-tools";
+    public static final String PROJECTNAME = "huanyuenwei-system";
     //包名称
-    public static final String PACKAGENAME = "com.daizhihua.tools";
+    public static final String PACKAGENAME = "com.daizhihua.system";
     //表名
-    public static final String[] TABLENAMES = {"message_image"};
+    public static final String[] TABLENAMES = {"business_order"};
 
     public static final long EXPIRATION_TIME = 7200;     // 2小时(以毫秒ms计)
     public static final String SECRET = "CodeSheepSecret";      // JWT密码

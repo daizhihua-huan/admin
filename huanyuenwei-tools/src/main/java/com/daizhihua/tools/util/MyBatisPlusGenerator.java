@@ -63,7 +63,7 @@ public class MyBatisPlusGenerator implements BeanPostProcessor,BeanFactoryPostPr
         //2. 数据源配置
         DataSourceConfig dsConfig = new DataSourceConfig();
         dsConfig.setDbType(DbType.MYSQL)  // 设置数据库类型
-                .setDriverName("com.mysql.jdbc.Driver").setUrl("jdbc:mysql://39.104.177.194:3306/daizhihua?useUnicode=true&characterEncoding=utf-8&useSSL=false")
+                .setDriverName("com.mysql.jdbc.Driver").setUrl("jdbc:mysql://39.104.177.194:3306/manager?useUnicode=true&characterEncoding=utf-8&useSSL=false")
                 .setUsername("daizhihua")
                 .setPassword("daizhihua1996");
 
@@ -121,7 +121,7 @@ public class MyBatisPlusGenerator implements BeanPostProcessor,BeanFactoryPostPr
                 .setFileOverride(true)  // 文件覆盖
                 .setIdType(IdType.ASSIGN_UUID) // 主键策略
                 .setServiceName(SERVICE_NAME)  // 设置生成的service接口的名字的首字母是否为I
-                .setSwagger2(false) //开启注解配置
+                .setSwagger2(true) //开启注解配置
                 .setBaseResultMap(true)//生成基本的resultMap
                 .setBaseColumnList(true);//生成基本的SQL片段
         return config;
